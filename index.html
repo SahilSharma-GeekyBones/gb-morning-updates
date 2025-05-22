@@ -124,12 +124,13 @@
       e.preventDefault();
       const data = Object.fromEntries(new FormData(form).entries());
       try {
+            alert("Submitting data:   "+ JSON.stringify(data));
         const res = await fetch("https://script.google.com/macros/s/AKfycbzLTCsaYnbG7ljlhwqQqw2WgtZsZcyvft070vR5jTeNmwetR8RfM-IS-1mdcOW19HhQ/exec", {
           method: "POST",
           body: JSON.stringify(data),
           headers: { "Content-Type": "application/json" }
         });
-        alert("Submitting data:   "+ JSON.stringify(data));
+    
         if (res.ok) {
           alert("Submitted successfully!");
           form.reset();
