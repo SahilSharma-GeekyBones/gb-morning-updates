@@ -129,7 +129,7 @@
           body: JSON.stringify(data),
           headers: { "Content-Type": "application/json" }
         });
-        console.log("Submitting data:", data);
+        alert("Submitting data:   "+ JSON.stringify(data));
         if (res.ok) {
           alert("Submitted successfully!");
           form.reset();
