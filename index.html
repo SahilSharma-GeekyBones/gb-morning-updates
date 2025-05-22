@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Morning Standup</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; max-width: 700px; margin: auto; }
+    label { font-weight: bold; display: block; margin-top: 20px; }
+    input, textarea, select { width: 100%; padding: 8px; margin-top: 4px; }
+    .hidden { display: none; }
+    button { margin-top: 20px; padding: 10px 20px; font-size: 16px; }
+  </style>
+</head>
+<body>
+
+  <h2>Morning Standup – Update Form</h2>
+
+  <form id="standupForm">
+    <label>Email:
+      <input type="email" name="email" required>
+    </label>
+
+    <label>Which project are you working on today?
+      <input type="text" name="project" required>
+    </label>
+
+    <label>Technical focus for today:
+      <textarea name="focus" required></textarea>
+    </label>
+
+    <label>Confidence in your next steps:
+      <select name="confidence" required>
+        <option value="">-- Select --</option>
+        <option value="Clear">Yes, clear</option>
+        <option value="Partial">Partially</option>
+        <option value="Unclear">Still figuring it out</option>
+      </select>
+    </label>
+
+    <label>Is the project on track?
+      <select name="timeline" id="timeline" required>
+        <option value="">-- Select --</option>
+        <option value="Yes">Yes</option>
+        <option value="Slightly delayed">Slightly delayed</option>
+        <option value="At risk">At risk</option>
+        <option value="Don't know">Don't know</option>
+      </select>
+    </label>
+
+    <div id="delayFields" class="hidden">
+      <label>Reason for delay:
+        <textarea name="delayReason"></textarea>
+      </label>
+
+      <label>What’s your plan to fix it?
+        <textarea name="recoveryPlan"></textarea>
+      </label>
+    </div>
+
+    <label>Type of work today:
+      <select name="workType" required>
+        <option value="">-- Select --</option>
+        <option value="Feature">New feature</option>
+        <option value="Bugfix">Bug fixing</option>
+        <option value="Review">Code review</option>
+        <option value="Planning">Planning / Research</option>
+        <option value="Meetings">Meetings</option>
+      </select>
+    </label>
+
+    <label>Complexity of task:
+      <select name="complexity" required>
+        <option value="">-- Select --</option>
+        <option value="Straightforward">Straightforward</option>
+        <option value="Moderate">Moderately complex</option>
+        <option value="Complex">Very complex</option>
+        <option value="Unknown">Still figuring it out</option>
+      </select>
+    </label>
+
+    <label>Workload feeling today:
+      <select name="workload" required>
+        <option value="">-- Select --</option>
+        <option value="Manageable">Focused and manageable</option>
+        <option value="Overloaded">Overloaded</option>
+        <option value="Blocked">Blocked or unclear</option>
+        <option value="Slow start">Slow start, will catch up</option>
+      </select>
+    </label>
+
+    <label>Any blockers?
+      <select name="hasBlockers" id="hasBlockers" required>
+        <option value="">-- Select --</option>
+        <option value="No">No</option>
+        <option value="Yes">Yes</option>
+      </select>
+    </label>
+
+    <div id="blockerDetailsField" class="hidden">
+      <label>Describe blockers:
+        <textarea name="blockerDetails"></textarea>
+      </label>
+    </div>
+
+    <button type="submit">Submit Update</button>
+  </form>
+
+  <script>
+    const form = document.getElementById('standupForm');
+    const timeline = document.getElementById('timeline');
+    const delayFields = document.getElementById('delayFields');
+    const hasBlockers = document.getElementById('hasBlockers');
+    const blockerDetailsField = document.getElementById('blockerDetailsField');
+
+    timeline.addEventListener('change', () => {
+      delayFields.classList.toggle('hidden', timeline.value === 'Yes');
+    });
+
+    hasBlockers.addEventListener('change', () => {
+      blockerDetailsField.classList.toggle('hidden', hasBlockers.value !== 'Yes');
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(form).entries());
+      try {
+        const res = await fetch("https://script.google.com/macros/s/AKfycbzLTCsaYnbG7ljlhwqQqw2WgtZsZcyvft070vR5jTeNmwetR8RfM-IS-1mdcOW19HhQ/exec", {
+          method: "POST",
+          body: JSON.stringify(data),
+          headers: { "Content-Type": "application/json" }
+        });
+        if (res.ok) {
+          alert("Submitted successfully!");
+          form.reset();
+          delayFields.classList.add('hidden');
+          blockerDetailsField.classList.add('hidden');
+        } else {
+          alert("Submission failed.");
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Error submitting form.");
+      }
+    });
+  </script>
+
+</body>
+</html>
