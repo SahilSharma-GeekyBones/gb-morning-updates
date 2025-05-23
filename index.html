@@ -127,7 +127,6 @@
         const res = await fetch("https://script.google.com/macros/s/AKfycbzLTCsaYnbG7ljlhwqQqw2WgtZsZcyvft070vR5jTeNmwetR8RfM-IS-1mdcOW19HhQ/exec", {
           method: "POST",
           body: JSON.stringify(data),
-          redirect: "follow",
           headers: { "Content-Type": "application/json" }
         });
     
