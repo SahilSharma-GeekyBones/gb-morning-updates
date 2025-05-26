@@ -4,12 +4,35 @@
   <meta charset="UTF-8">
   <title>Morning Standup</title>
   <style>
-    body { font-family: sans-serif; padding: 20px; max-width: 700px; margin: auto; }
-    label { font-weight: bold; display: block; margin-top: 20px; }
-    input, textarea, select { width: 100%; padding: 8px; margin-top: 4px; }
-    .hidden { display: none; }
-    button { margin-top: 20px; padding: 10px 20px; font-size: 16px; }
-    #loader { margin-top: 20px; font-style: italic; color: gray; }
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      max-width: 700px;
+      margin: auto;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 20px;
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 4px;
+    }
+    .hidden {
+      display: none;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+    #loader {
+      margin-top: 20px;
+      font-style: italic;
+      color: gray;
+    }
   </style>
 </head>
 <body>
@@ -58,7 +81,7 @@
       </label>
     </div>
 
-     <label>Type of work today:
+    <label>Type of work today:
       <select name="workType" required>
         <option value="">-- Select --</option>
         <option value="Feature">New feature</option>
@@ -69,7 +92,6 @@
       </select>
     </label>
 
-    <!-- Complexity -->
     <label>Complexity of task:
       <select name="complexity" required>
         <option value="">-- Select --</option>
@@ -108,7 +130,7 @@
     <div id="loader" class="hidden">Submitting, please wait...</div>
   </form>
 
-   <script>
+  <script>
     const form = document.getElementById('standupForm');
     const timeline = document.getElementById('timeline');
     const delayFields = document.getElementById('delayFields');
@@ -128,12 +150,17 @@
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      // Disable button and show loader
       submitBtn.disabled = true;
       loader.classList.remove('hidden');
 
       const formData = new FormData(form);
       const encoded = new URLSearchParams(formData);
+
+      // Log form values for debugging
+      console.log("Form submission payload:");
+      for (const [key, value] of formData.entries()) {
+        console.log(`${key}: ${value}`);
+      }
 
       try {
         const res = await fetch("https://script.google.com/macros/s/AKfycbzLTCsaYnbG7ljlhwqQqw2WgtZsZcyvft070vR5jTeNmwetR8RfM-IS-1mdcOW19HhQ/exec", {
@@ -150,10 +177,10 @@
           delayFields.classList.add('hidden');
           blockerDetailsField.classList.add('hidden');
         } else {
-          alert("Submission failed.");
+          alert("Submission failed. Try again.");
         }
       } catch (err) {
-        console.error(err);
+        console.error("Error during fetch:", err);
         alert("Error submitting form.");
       } finally {
         submitBtn.disabled = false;
