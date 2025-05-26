@@ -9,6 +9,7 @@
     input, textarea, select { width: 100%; padding: 8px; margin-top: 4px; }
     .hidden { display: none; }
     button { margin-top: 20px; padding: 10px 20px; font-size: 16px; }
+    #loader { margin-top: 20px; font-style: italic; color: gray; }
   </style>
 </head>
 <body>
@@ -57,7 +58,7 @@
       </label>
     </div>
 
-    <label>Type of work today:
+     <label>Type of work today:
       <select name="workType" required>
         <option value="">-- Select --</option>
         <option value="Feature">New feature</option>
@@ -68,6 +69,7 @@
       </select>
     </label>
 
+    <!-- Complexity -->
     <label>Complexity of task:
       <select name="complexity" required>
         <option value="">-- Select --</option>
@@ -102,15 +104,18 @@
       </label>
     </div>
 
-    <button type="submit">Submit Update</button>
+    <button type="submit" id="submitBtn">Submit Update</button>
+    <div id="loader" class="hidden">Submitting, please wait...</div>
   </form>
 
-  <script>
+   <script>
     const form = document.getElementById('standupForm');
     const timeline = document.getElementById('timeline');
     const delayFields = document.getElementById('delayFields');
     const hasBlockers = document.getElementById('hasBlockers');
     const blockerDetailsField = document.getElementById('blockerDetailsField');
+    const submitBtn = document.getElementById('submitBtn');
+    const loader = document.getElementById('loader');
 
     timeline.addEventListener('change', () => {
       delayFields.classList.toggle('hidden', timeline.value === 'Yes');
@@ -122,6 +127,10 @@
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
+
+      // Disable button and show loader
+      submitBtn.disabled = true;
+      loader.classList.remove('hidden');
 
       const formData = new FormData(form);
       const encoded = new URLSearchParams(formData);
@@ -146,6 +155,9 @@
       } catch (err) {
         console.error(err);
         alert("Error submitting form.");
+      } finally {
+        submitBtn.disabled = false;
+        loader.classList.add('hidden');
       }
     });
   </script>
